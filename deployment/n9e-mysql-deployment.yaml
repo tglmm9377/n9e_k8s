@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: n9e-mysql
+  namespace: n9e
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n9e-mysql
+  template:
+    metadata:
+      labels:
+        app: n9e-mysql
+    spec:
+      containers:
+      - name: n9e-mysql
+        image: 72.160.3.162/testimages/n9e-mysql:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 3306
+          protocol: TCP
+      restartPolicy: Always

@@ -1,0 +1,38 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: n9e-nginx
+  namespace: n9e
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n9e-nginx
+  template:
+    metadata:
+      labels:
+        app: n9e-nginx
+    spec:
+      containers:
+      - name: n9e-nginx
+        image: 72.160.3.162/testimages/n9e-nginx:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+        volumeMounts:
+        - name: nginx-conf
+          mountPath: /etc/nginx/nginx.conf
+          subPath: nginx.conf
+        - name: n9e-pub
+          mountPath: /home/n9e
+      restartPolicy: Always
+      volumes:
+      - name: nginx-conf
+        configMap:
+          name: n9e-nginx-conf
+          items:
+            - key: nginx.conf
+              path: nginx.conf
+      - name: n9e-pub
+        pa

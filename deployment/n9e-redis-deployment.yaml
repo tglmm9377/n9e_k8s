@@ -1,0 +1,23 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: n9e-redis
+  namespace: n9e
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n9e-redis
+  template:
+    metadata:
+      labels:
+        app: n9e-redis
+    spec:
+      containers:
+      - name: n9e-redis
+        image: 72.160.3.162/testimages/n9e-redis:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 80
+          protocol: TCP
+      restartPolicy: Always

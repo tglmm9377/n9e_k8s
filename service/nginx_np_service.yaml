@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: n9e-nginx
+  namespace: n9e
+spec:
+  ports:
+  - name: nginx
+    port: 80
+    protocol: TCP
+    targetPort: 80
+  selector:
+    app: n9e-nginx
+  sessionAffinity: None
+  type: NodePort

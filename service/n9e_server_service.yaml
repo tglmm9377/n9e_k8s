@@ -1,0 +1,19 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: n9e-server
+  namespace: n9e
+spec:
+  ports:
+  - name: http
+    port: 8000
+    protocol: TCP
+    targetPort: 8000
+  - name: rpc
+    port: 8001
+    protocol: TCP
+    targetPort: 8001
+  selector:
+    app: n9e
+  sessionAffinity: None
+  type: NodePort

@@ -1,0 +1,78 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: n9e
+  namespace: n9e
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: n9e
+  template:
+    metadata:
+      labels:
+        app: n9e
+    spec:
+      nodeName: 72.160.3.166
+      containers:
+      - name: n9e-server
+        image: 72.160.3.162/testimages/n9e-server:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8000
+          protocol: TCP
+        - containerPort: 8001
+          protocol: TCP
+        volumeMounts:
+        - name: home
+          mountPath: /home/n9e/
+        - name: time-zone-server
+          mountPath: /etc/localtime
+      - name: n9e-prober
+        image: 72.160.3.162/testimages/n9e-prober:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8023
+          protocol: TCP
+        volumeMounts:
+        - name: home
+          mountPath: /home/n9e/
+        - name: time-zone-prober
+          mountPath: /etc/localtime
+      - name: n9e-agent
+        image: 72.160.3.162/testimages/n9e-agentd:latest
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 2080
+          protocol: TCP
+        volumeMounts:
+        - name: home
+          mountPath: /home/n9e/
+        - name: time-zone-agentd
+          mountPath: /etc/localtime
+      - name: n9e-redis
+        image: 72.160.3.162/testimages/n9e-redis:latest
+        imagePullPolicy: Always
+        name: n9e-redis
+        ports:
+        - containerPort: 6379
+          protocol: TCP
+        volumeMounts:
+        - mountPath: /etc/localtime
+          name: time-zone-redis
+      volumes:
+      - name: time-zone-redis
+        hostPath:
+          path: /etc/localtime
+      - name: time-zone-prober
+        hostPath:
+          path: /etc/localtime
+      - name: time-zone-server
+        hostPath:
+          path: /etc/localtime
+      - name: time-zone-agentd
+        hostPath:
+          path: /etc/localtime
+      - name: home
+        hostPath:
+          path: /data/n9e
